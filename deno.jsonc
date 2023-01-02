@@ -1,0 +1,9 @@
+{
+  "tasks": {
+    "run": "PUPPETEER_PRODUCT=chrome deno run --allow-env --allow-read --allow-write --allow-run --allow-net ./main.ts",
+    "test": "PUPPETEER_PRODUCT=chrome deno test --allow-env --allow-read --allow-write --allow-run --allow-net"
+  },
+  "compilerOptions": {
+    "lib": ["deno.ns", "dom", "dom.iterable", "dom.asynciterable"]
+  }
+}
