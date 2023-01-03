@@ -1,5 +1,10 @@
 # miyadai-oshirase-twitter-bot
 
+[![CI](https://github.com/korosuke613/miyadai-oshirase-twitter-bot/actions/workflows/ci.yaml/badge.svg)](https://github.com/korosuke613/miyadai-oshirase-twitter-bot/actions/workflows/ci.yaml) [![codecov](https://codecov.io/gh/korosuke613/miyadai-oshirase-twitter-bot/branch/main/graph/badge.svg?token=mS7uVtbmOW)](https://codecov.io/gh/korosuke613/miyadai-oshirase-twitter-bot)
+
+<details>
+<summary>Twitter API elevete log</summary>
+
 申請文
 
 ```
@@ -29,3 +34,7 @@ I do not plan to retrieve tweets from other accounts.
 ```
 Use `Tweet`. This is because I need to Tweet the announcement. Of course, other permissions (Retweet, Like, Follow, or Direct Message) are not used.
 ```
+
+</details>
+
+
