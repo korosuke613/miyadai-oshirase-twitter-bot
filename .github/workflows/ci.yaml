@@ -7,7 +7,7 @@ permissions:
   contents: read
 
 env:
-  DENO_DIR: my_cache_directory
+  INSTALL_DENO_VERSION: v1.x
 
 jobs:
   deno-lint:
@@ -15,29 +15,29 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Setup DENO_DIR
+        run: |
+          echo "DENO_DIR=${{ runner.temp }}/my_cache_directory" >> $GITHUB_ENV
+
       - name: Cache Deno dependencies
         uses: actions/cache@v3
         with:
           path: ${{ env.DENO_DIR }}
-          key: ${{ runner.os }}-${{ hashFiles('deno.lock') }}
+          key: ${{ runner.os }}-${{ env.INSTALL_DENO_VERSION }}
           restore-keys: |
             ${{ runner.os }}-
 
       - uses: denoland/setup-deno@v1.1.1
         with:
-          deno-version: v1.x
-
-      - name: Cache dependencies
-        run: |
-          deno cache --lock deno.lock dev_deps.ts deps.ts
+          deno-version: ${{ env.INSTALL_DENO_VERSION }}
 
       - name: Run fmt
         run: |
-          deno fmt --check ./src ./main.ts ./deps.ts ./dev_deps.ts
+          deno fmt --check
 
       - name: Run lint
         run: |
-          deno lint ./src ./main.ts ./deps.ts ./dev_deps.ts
+          deno lint
 
       - name: Check mod.ts
         run: |
@@ -48,6 +48,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Setup DENO_DIR
+        run: |
+          echo "DENO_DIR=${{ runner.temp }}/my_cache_directory" >> $GITHUB_ENV
+
       - name: Cache Deno dependencies
         uses: actions/cache@v3
         with:
@@ -58,7 +62,7 @@ jobs:
 
       - uses: denoland/setup-deno@v1.1.1
         with:
-          deno-version: v1.x
+          deno-version: ${{ env.INSTALL_DENO_VERSION }}
 
       - name: Install browser
         run: |
