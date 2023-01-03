@@ -73,7 +73,6 @@ export class Scraper {
       );
     }
 
-    // console.debug(JSON.stringify(list, null, 2));
     return list;
   }
 

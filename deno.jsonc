@@ -2,8 +2,21 @@
   "tasks": {
     "install": "PUPPETEER_PRODUCT=chrome deno run -A --unstable https://deno.land/x/puppeteer@16.2.0/install.ts",
     "run": "TZ=UTC PUPPETEER_PRODUCT=chrome deno run --allow-env --allow-read --allow-write --allow-run --allow-net ./main.ts",
-    "test": "TZ=UTC PUPPETEER_PRODUCT=chrome deno test --allow-env --allow-read --allow-write --allow-run --allow-net",
-    "test:coverage": "deno task test --coverage=cov_profile"
+    "test": "TZ=UTC PUPPETEER_PRODUCT=chrome deno test --allow-env --allow-read --allow-write --allow-run --allow-net --parallel",
+    "test:coverage": "deno task test --coverage=cov_profile",
+    "launch_login_server": "deno run --allow-read --allow-env --allow-net tools/twitter_callback.ts"
+  },
+  "lint": {
+    "files": {
+      "include": ["main.ts", "deps.ts", "dev_deps.ts", "src/"],
+      "exclude": ["src/__tests__/data/"]
+    }
+  },
+  "fmt": {
+    "files": {
+      "include": ["main.ts", "deps.ts", "dev_deps.ts", "src/"],
+      "exclude": ["src/__tests__/data/"]
+    }
   },
   "compilerOptions": {
     "lib": ["deno.ns", "dom", "dom.iterable", "dom.asynciterable"]
