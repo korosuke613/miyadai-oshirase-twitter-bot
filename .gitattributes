@@ -1,0 +1,4 @@
+# see https://github.com/github/linguist/blob/c1c34e5260797b4d598f5ec76f19723bfc5a1894/docs/overrides.md
+
+# test data
+src/__tests__/data/* linguist-documentation
