@@ -1,13 +1,32 @@
-import { Env } from "./deps.ts";
 import { makeScraper } from "./src/scraper.ts";
-import { makeTwitter } from "./src/twitter.ts";
+import {
+  readLocalEnv,
+  saveTwitterUserRefreshTokenToLocalFile,
+} from "./src/secrets.ts";
+import { makeTwitter, refreshToken } from "./src/twitter.ts";
 
-const env = new Env();
+const secrets = await readLocalEnv();
+
+const userToken = await refreshToken(
+  secrets.twitterClientId,
+  secrets.twitterClientSecret,
+  secrets.twitterUserRefreshToken,
+);
+
+if (
+  userToken === undefined ||
+  userToken.access_token === undefined ||
+  userToken.refresh_token === undefined
+) {
+  throw new Error("Failed refresh access token");
+}
+await saveTwitterUserRefreshTokenToLocalFile(userToken.refresh_token);
 
 const twitter = await makeTwitter({
-  bearerToken: env.require("TWITTER_USER_BEARER_TOKEN"),
-  userId: env.require("TWITTER_USER_ID"),
+  bearerToken: userToken.access_token,
+  userId: secrets.twitterUserId,
 });
+
 const recentTweets = await twitter.getRecentTweets();
 if (recentTweets === undefined) {
   throw new Error("Failed get recent tweets.");
