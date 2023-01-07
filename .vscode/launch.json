@@ -4,11 +4,22 @@
   // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+
     {
       "request": "launch",
       "name": "Test twitter.test.ts",
       "type": "pwa-node",
       "program": "${workspaceFolder}/src/__tests__/twitter.test.ts",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "/opt/homebrew/bin/deno",
+      "runtimeArgs": ["test", "--inspect-brk", "--allow-all"],
+      "attachSimplePort": 9229
+    },
+    {
+      "request": "launch",
+      "name": "Test secrets.test.ts",
+      "type": "pwa-node",
+      "program": "${workspaceFolder}/src/__tests__/secrets.test.ts",
       "cwd": "${workspaceFolder}",
       "runtimeExecutable": "/opt/homebrew/bin/deno",
       "runtimeArgs": ["test", "--inspect-brk", "--allow-all"],
