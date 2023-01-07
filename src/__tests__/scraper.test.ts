@@ -1,3 +1,4 @@
+import { puppeteer } from "../../deps.ts";
 import {
   afterEach,
   assertEquals,
@@ -6,29 +7,50 @@ import {
   it,
   path,
 } from "../../dev_deps.ts";
-import { makeScraper, Scraper } from "../scraper.ts";
+import {
+  AllNewsScraper,
+  Browser,
+  makeAllNewsScraper,
+  NewsScraper,
+} from "../scraper.ts";
 
 const __dirname = new URL(".", import.meta.url).pathname;
 const allNewsHtmlPath = path.join(__dirname, "data", "all_news.html");
+const newsDormitoryHtmlPath = path.join(
+  __dirname,
+  "data",
+  "news_dormitory.html",
+);
+const newsGakugeiinHtmlPath = path.join(
+  __dirname,
+  "data",
+  "news_gakugeiin.html",
+);
 
-describe("Scraper", () => {
-  let scraper: Scraper;
+describe("AllNewsScraper", () => {
+  let scraper: AllNewsScraper;
+  let browser: Browser;
 
   beforeEach(async () => {
-    scraper = await makeScraper({
+    const puppeteerBrowser = await puppeteer.launch();
+    browser = new Browser(puppeteerBrowser);
+    const page = await browser.newPage(`file://${allNewsHtmlPath}`, {
+      // Set longer for timeout on github actions.
+      timeout: 5000,
+    });
+
+    scraper = await makeAllNewsScraper(browser, {
+      page,
       sinceDate: new Date("2022-12-01T15:00:00Z"),
     });
   });
 
   afterEach(async () => {
-    await scraper.close();
+    await browser.close();
   });
 
   it("success: listNewNewsSinceYesterday", async () => {
-    const page = await scraper.newPage();
-    await page.goto(`file://${allNewsHtmlPath}`);
-
-    const actual = await scraper.listNewNewsSinceYesterday(page);
+    const actual = await scraper.listNewNewsSinceYesterday();
     assertEquals(actual, [
       {
         "title":
@@ -74,5 +96,66 @@ describe("Scraper", () => {
         "date": new Date("2022-12-07T00:00:00.000Z"),
       },
     ]);
+  });
+});
+
+describe("NewsScraper", () => {
+  let browser: Browser;
+
+  beforeEach(async () => {
+    const puppeteerBrowser = await puppeteer.launch();
+    browser = new Browser(puppeteerBrowser);
+  });
+
+  afterEach(async () => {
+    await browser.close();
+  });
+
+  it("success: analyze newsDormitoryHtmlPath", async () => {
+    const page = await browser.newPage(`file://${newsDormitoryHtmlPath}`, {
+      // Set longer for timeout on github actions.
+      timeout: 5000,
+    });
+
+    const scraper = new NewsScraper(page, {
+      "title":
+        "【学生寮・留学生】国際交流宿舎・木花/清武ドミトリーの入居者募集について（外国人留学生）2023.4入居",
+      "url":
+        "http://gakumu.of.miyazaki-u.ac.jp/gakumu/campuslifeinfo/campuslifeinfo/5641-2023-1-6.html",
+      "date": new Date("2023-01-05T00:00:00.000Z"),
+    });
+
+    const actual = await scraper.analyze();
+    assertEquals(actual, {
+      title:
+        "【学生寮・留学生】国際交流宿舎・木花/清武ドミトリーの入居者募集について（外国人留学生）2023.4入居",
+      url:
+        "http://gakumu.of.miyazaki-u.ac.jp/gakumu/campuslifeinfo/campuslifeinfo/5641-2023-1-6.html",
+      date: new Date("2023-01-05T00:00:00.000Z"),
+      category: "学生生活情報",
+      pdfLinks: [
+        "file:///gakumu/images/01_Room_Availability.pdf",
+        "file:///gakumu/images/02_Application_Guide.pdf",
+      ],
+    });
+  });
+
+  it("success: analyze newsGakugeiinHtmlPath", async () => {
+    const page = await browser.newPage(`file://${newsGakugeiinHtmlPath}`, {
+      // Set longer for timeout on github actions.
+      timeout: 5000,
+    });
+
+    const scraper = new NewsScraper(page, {
+      "title": "hoge",
+      "url": "hoge",
+      "date": new Date("2023-01-05T00:00:00.000Z"),
+    });
+
+    const { category, pdfLinks } = await scraper.analyze();
+    assertEquals({ category, pdfLinks }, {
+      category: "教務情報",
+      pdfLinks: [],
+    });
   });
 });

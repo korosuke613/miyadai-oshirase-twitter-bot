@@ -8,7 +8,7 @@
   },
   "lint": {
     "files": {
-      "include": ["main.ts", "deps.ts", "dev_deps.ts", "src/"],
+      "include": ["deps.ts", "dev_deps.ts", "src/"],
       "exclude": ["src/__tests__/data/"]
     }
   },
