@@ -1,5 +1,27 @@
 import { twitterSdk } from "../deps.ts";
 
+export const refreshToken = async (
+  clientId: string,
+  clientSecret: string,
+  refreshToken: string,
+) => {
+  try {
+    const authClient = new twitterSdk.auth.OAuth2User(
+      {
+        token: { refresh_token: refreshToken },
+        client_id: clientId,
+        client_secret: clientSecret,
+        callback: "http://127.0.0.1:3000/callback",
+        scopes: ["tweet.read", "tweet.write", "users.read", "offline.access"],
+      },
+    );
+    const { token } = await authClient.refreshAccessToken();
+    return token;
+  } catch (e) {
+    console.error(JSON.stringify(e, null, 2));
+  }
+};
+
 export class Twitter {
   constructor(private client: twitterSdk.Client, private userId: string) {}
 
@@ -47,5 +69,6 @@ export const makeTwitter = (param: {
   const client = new twitterSdk.Client(
     param.bearerToken,
   );
+
   return new Twitter(client, param.userId);
 };

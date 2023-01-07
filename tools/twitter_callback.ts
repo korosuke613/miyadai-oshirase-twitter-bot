@@ -9,7 +9,7 @@ const authClient = new twitterSdk.auth.OAuth2User({
   client_id: env.require("TWITTER_OAUTH_CLIENT_ID"),
   client_secret: env.require("TWITTER_OAUTH_CLIENT_SECRET"),
   callback: "http://127.0.0.1:3000/callback",
-  scopes: ["tweet.read", "tweet.write", "users.read"],
+  scopes: ["tweet.read", "tweet.write", "users.read", "offline.access"],
 });
 
 const client = new twitterSdk.Client(authClient);
