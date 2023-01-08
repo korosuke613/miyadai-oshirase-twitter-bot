@@ -155,3 +155,4 @@ dist
 *.png
 cov_profile/
 .TWITTER_USER_REFRESH_TOKEN
+*.pdf
