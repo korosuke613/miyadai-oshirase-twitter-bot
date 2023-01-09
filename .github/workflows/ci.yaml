@@ -91,5 +91,6 @@ jobs:
         uses: codecov/codecov-action@v3
         if: always()
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: ./cov_profile.lcov
           flags: unittests
