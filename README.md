@@ -12,13 +12,15 @@ sequenceDiagram
     participant MiyadaiNewsPage
     participant Twitter
     Note over Program: by Scraper
-    Program->>MiyadaiAllNewsPage: Get new news from the execution date
+    Program->>+MiyadaiAllNewsPage: Get new news from the execution date
+    MiyadaiAllNewsPage-->>-Program: {title, date, url}
     Program->>Program: Extract news URLs from miyadai news
     Note over Program: by TwitterClient
     Program->>Twitter: Auth
-    Program->>Twitter: Get recent tweets (10)
+    Program->>+Twitter: Get recent tweets (10)
+    Twitter-->>-Program: {text, date}
     Note over Program: by Bot
-    Program->>Program: Extract news URLs from tweets
+    Program->>Program: Extract news URLs from tweet texts
     Program->>Program: Exclude news that has already been tweeted
     loop Number of new news
         Note over Program: by Scraper
