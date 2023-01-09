@@ -2,6 +2,44 @@
 
 [![CI](https://github.com/korosuke613/miyadai-oshirase-twitter-bot/actions/workflows/ci.yaml/badge.svg)](https://github.com/korosuke613/miyadai-oshirase-twitter-bot/actions/workflows/ci.yaml) [![codecov](https://codecov.io/gh/korosuke613/miyadai-oshirase-twitter-bot/branch/main/graph/badge.svg?token=mS7uVtbmOW)](https://codecov.io/gh/korosuke613/miyadai-oshirase-twitter-bot)
 
+## Flow
+Steps to tweet.
+
+```mermaid
+sequenceDiagram
+    participant Program
+    participant MiyadaiAllNewsPage
+    participant MiyadaiNewsPage
+    participant Twitter
+    Note over Program: by Scraper
+    Program->>MiyadaiAllNewsPage: Get new news from the execution date
+    Program->>Program: Extract news URLs from miyadai news
+    Note over Program: by TwitterClient
+    Program->>Twitter: Auth
+    Program->>Twitter: Get recent tweets (10)
+    Note over Program: by Bot
+    Program->>Program: Extract news URLs from tweets
+    Program->>Program: Exclude news that has already been tweeted
+    loop Number of new news
+        Note over Program: by Scraper
+        par 
+        Program->>MiyadaiNewsPage: Get news category
+        and
+        Program->>MiyadaiNewsPage: Screenshot of news body
+        and
+        Program->>MiyadaiNewsPage: Get pdf links
+        Program->>MiyadaiNewsPage: Download pdf
+        Program->>Program: Convert first page of PDF to png (using pdftoppm)
+        end
+        Note over Program: by Bot
+        Program->>Twitter: Tweet news detail and screenshot and first page of pdf
+    end
+```
+
+<!--
+https://mermaid.js.org/syntax/sequenceDiagram.html#sequencenumbers
+-->
+
 <details>
 <summary>Twitter API elevete log</summary>
 
