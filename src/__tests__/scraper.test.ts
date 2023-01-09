@@ -126,6 +126,10 @@ describe("NewsScraper", () => {
     });
 
     const actual = await scraper.analyze();
+
+    // No base64 testing is performed.
+    delete actual.screenshot;
+
     assertEquals(actual, {
       title:
         "【学生寮・留学生】国際交流宿舎・木花/清武ドミトリーの入居者募集について（外国人留学生）2023.4入居",
@@ -137,6 +141,7 @@ describe("NewsScraper", () => {
         "file:///gakumu/images/01_Room_Availability.pdf",
         "file:///gakumu/images/02_Application_Guide.pdf",
       ],
+      pdfShots: [],
     });
   });
 

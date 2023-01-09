@@ -1,4 +1,4 @@
-import { ensureFile } from "../deps.ts";
+import { encode, ensureFile } from "../deps.ts";
 
 export const downloadPdf = async (pdfLink: string, filePath: string) => {
   const resp = await fetch(pdfLink);
@@ -18,6 +18,10 @@ export const convertPng = async (filePath: string) => {
   const command = await Deno.run({
     cmd: ["pdftoppm", filePath, "-png", "-singlefile", outputFile],
   });
-  const status = await command.status();
-  console.log(status);
+  return await command.status();
+};
+
+export const pngToBase64 = async (filePath: string) => {
+  const file = await Deno.readFile(filePath);
+  return encode(file);
 };

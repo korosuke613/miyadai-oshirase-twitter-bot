@@ -5,6 +5,8 @@ export type ListedNews = {
 };
 
 export type DetailNews = ListedNews & {
+  screenshot?: string;
   category?: string;
   pdfLinks: string[];
+  pdfShots: string[];
 };
