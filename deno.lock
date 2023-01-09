@@ -151,6 +151,7 @@
     "https://deno.land/std@0.171.0/async/pool.ts": "fd082bd4aaf26445909889435a5c74334c017847842ec035739b4ae637ae8260",
     "https://deno.land/std@0.171.0/async/retry.ts": "5efa3ba450ac0c07a40a82e2df296287b5013755d232049efd7ea2244f15b20f",
     "https://deno.land/std@0.171.0/async/tee.ts": "47e42d35f622650b02234d43803d0383a89eb4387e1b83b5a40106d18ae36757",
+    "https://deno.land/std@0.171.0/encoding/base64.ts": "7de04c2f8aeeb41453b09b186480be90f2ff357613b988e99fabb91d2eeceba1",
     "https://deno.land/std@0.171.0/fs/_util.ts": "65381f341af1ff7f40198cee15c20f59951ac26e51ddc651c5293e24f9ce6f32",
     "https://deno.land/std@0.171.0/fs/ensure_dir.ts": "724209875497a6b4628dfb256116e5651c4f7816741368d6c44aab2531a1e603",
     "https://deno.land/std@0.171.0/fs/ensure_file.ts": "c38602670bfaf259d86ca824a94e6cb9e5eb73757fefa4ebf43a90dd017d53d9",
@@ -362,7 +363,8 @@
       "date-fns@2.29.3": "date-fns@2.29.3",
       "express": "express@4.18.2",
       "express@4.18.2": "express@4.18.2",
-      "twitter-api-sdk@1.2.1": "twitter-api-sdk@1.2.1"
+      "twitter-api-sdk@1.2.1": "twitter-api-sdk@1.2.1",
+      "twitter-api-v2@1.13.0": "twitter-api-v2@1.13.0"
     },
     "packages": {
       "@types/body-parser@1.19.2": {
@@ -754,6 +756,10 @@
           "abort-controller": "abort-controller@3.0.0",
           "node-fetch": "node-fetch@2.6.7"
         }
+      },
+      "twitter-api-v2@1.13.0": {
+        "integrity": "sha512-vtR4lwHbaG5Ep91wj9N+ZOYpJMIj+J6N2ESmyYtoBIZC+T2lQjrHAkwLRqKgEt01N+Ro/zHxpQp++QpWeCfn2A==",
+        "dependencies": {}
       },
       "type-is@1.6.18": {
         "integrity": "sha512-TkRKr9sUTxEH8MdfuCSP7VizJyzRNMjj2J2do2Jr3Kym598JVdEksuzPQCnlFPW4ky9Q+iA+ma9BGm06XQBy8g==",

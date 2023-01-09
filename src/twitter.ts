@@ -1,4 +1,4 @@
-import { twitterSdk } from "../deps.ts";
+import { TwitterApi, twitterSdk } from "../deps.ts";
 
 export const refreshToken = async (
   clientId: string,
@@ -19,6 +19,7 @@ export const refreshToken = async (
     return token;
   } catch (e) {
     console.error(JSON.stringify(e, null, 2));
+    throw e;
   }
 };
 
@@ -47,6 +48,34 @@ export class Twitter {
       return data;
     } catch (e) {
       console.error(JSON.stringify(e, null, 2));
+      throw e;
+    }
+  }
+
+  /**
+   * @returns media_id
+   */
+  async uploadMedia(
+    fileBase64: string,
+    altText: string,
+    token: string,
+  ): Promise<string> {
+    try {
+      const media = Buffer.from(fileBase64, "base64");
+
+      // Twitter API v2 does not support media upload, so use 3rd party libraries only for this part.
+      const twitterClient = new TwitterApi(token);
+      const mediaId = await twitterClient.v1.uploadMedia(media);
+      await twitterClient.v1.createMediaMetadata(mediaId, {
+        alt_text: {
+          text: altText,
+        },
+      });
+
+      return mediaId;
+    } catch (e) {
+      console.error(JSON.stringify(e, null, 2));
+      throw e;
     }
   }
 
@@ -58,6 +87,7 @@ export class Twitter {
       return result;
     } catch (e) {
       console.error(JSON.stringify(e, null, 2));
+      throw e;
     }
   }
 }

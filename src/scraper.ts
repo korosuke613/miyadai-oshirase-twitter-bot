@@ -169,7 +169,11 @@ export class NewsScraper {
     return undefined;
   }
 
-  async screenshot(config?: { path?: string }) {
+  private addThree(value: string | Buffer) {
+    return typeof value === "string";
+  }
+
+  async screenshot() {
     const selector = "#wrapper2";
     await this.page.waitForSelector(selector);
 
@@ -182,15 +186,21 @@ export class NewsScraper {
       throw new Error("Failed get screenshot area boundingBox.");
     }
 
-    await screenShotAreaElement.screenshot({
+    const screenshotBase64 = await screenShotAreaElement.screenshot({
       clip: {
         x: screenshotAreaBox.x - this.screenshotBuffer,
         y: screenshotAreaBox.y,
         width: screenshotAreaBox.width + this.screenshotBuffer * 2,
         height: screenshotAreaBox.height,
       },
-      path: config?.path ? config.path : "news_screenshot.png",
+      encoding: "base64",
     });
+
+    if (typeof screenshotBase64 !== "string") {
+      throw new Error("Failed screenshot");
+    }
+
+    return screenshotBase64;
   }
 
   async searchPdfLink(): Promise<string[]> {
@@ -218,13 +228,13 @@ export class NewsScraper {
   async analyze(): Promise<DetailNews> {
     const detailNews: DetailNews = {
       pdfLinks: [],
+      pdfShots: [],
       ...this.listedNews,
     };
 
     detailNews.category = await this.getCategory();
-    await this.screenshot();
-    const pdfLinks = await this.searchPdfLink();
-    detailNews.pdfLinks = pdfLinks;
+    detailNews.screenshot = await this.screenshot();
+    detailNews.pdfLinks = await this.searchPdfLink();
 
     return detailNews;
   }
